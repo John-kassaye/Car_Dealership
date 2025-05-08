@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DealershipFileManager {
     static String file = "inventory.csv";
-    public void getDealership(){
+    public Dealership getDealership(){
         Dealership dealership = new Dealership("honda","33rd ave","233-111-2243");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             bufferedReader.readLine();
@@ -30,6 +30,7 @@ public class DealershipFileManager {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return dealership;
     }
 
     public void saveDealership(Dealership dealership){

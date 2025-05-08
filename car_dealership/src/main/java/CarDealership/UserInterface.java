@@ -47,6 +47,9 @@ public class UserInterface {
                   case 9:
                       processGetByRemoveVehicleRequest();
                       break;
+                  case 99:
+                      System.out.println("Thank you!");
+                      break;
                   default:
                       System.out.println("Invalid input");
               }

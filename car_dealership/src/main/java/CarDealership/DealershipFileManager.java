@@ -1,7 +1,6 @@
 package CarDealership;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +32,37 @@ public class DealershipFileManager {
         return dealership;
     }
 
-    public void saveDealership(Dealership dealership){
+    public void saveDealership(Vehicle vehicle ){
 
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file,true))){
+            bufferedWriter.write(vehicle.saveFormat());
+            bufferedWriter.newLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    public void removeDealership(Vehicle vehicle){
+
+        List<String> vehicleList = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
+            String line;
+            while ((line = bufferedReader.readLine()) != null){
+                if (!line.trim().equals(vehicle.saveFormat())){
+                    vehicleList.add(line);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))){
+           for (String line : vehicleList){
+               bufferedWriter.write(line);
+               bufferedWriter.newLine();
+        }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

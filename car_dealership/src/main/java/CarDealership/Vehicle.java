@@ -52,4 +52,21 @@ public class Vehicle {
     public double getPrice() {
         return price;
     }
+
+    @Override
+    public String toString() {
+        return "VIN: " + vin +
+                ", Year: " + year +
+                ", Make: " + make +
+                ", Model: " + model +
+                ", Type: " + vehicleType +
+                ", Color: " + color +
+                ", Odometer: " + odometer + " miles" +
+                ", Price: $" + price;
+    }
+
+    public String saveFormat(){
+        return vin + "|" + year + "|" + make + "|" + model + "|" + vehicleType + "|" + color + "|" + odometer + "|" + price;
+    }
+
 }

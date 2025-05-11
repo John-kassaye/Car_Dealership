@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DealershipFileManager {
-    static String file = "inventory.csv";
+    static File file = new File("inventory.csv");
     public Dealership getDealership(){
         Dealership dealership = new Dealership("honda","33rd ave","233-111-2243");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -44,25 +44,56 @@ public class DealershipFileManager {
 
     public void removeDealership(Vehicle vehicle){
 
-        List<String> vehicleList = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
+//        List<String> vehicleList = new ArrayList<>();
+//        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null){
+//                if (!line.trim().equalsIgnoreCase(vehicle.saveFormat())){
+//                    vehicleList.add(line);
+//                }
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))){
+//           for (String line : vehicleList){
+//               bufferedWriter.write(line);
+//               bufferedWriter.newLine();
+//        }
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        File temp = new File("temp.csv");
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(temp));
+
             String line;
             while ((line = bufferedReader.readLine()) != null){
-                if (!line.trim().equals(vehicle.saveFormat())){
-                    vehicleList.add(line);
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))){
-           for (String line : vehicleList){
-               bufferedWriter.write(line);
-               bufferedWriter.newLine();
-        }
+                if (line.equalsIgnoreCase(vehicle.saveFormat())){
+                    continue;
+                }
+
+                bufferedWriter.write(line);
+                bufferedWriter.newLine();
+            }
+
+            bufferedReader.close();
+            bufferedWriter.close();
+
+            file.delete();
+            temp.renameTo(file);
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+
     }
 }

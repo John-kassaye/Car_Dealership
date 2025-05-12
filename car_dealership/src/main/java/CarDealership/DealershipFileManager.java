@@ -6,13 +6,15 @@ import java.util.List;
 
 public class DealershipFileManager {
     static File file = new File("inventory.csv");
-    public Dealership getDealership(){
-        Dealership dealership = new Dealership("honda","33rd ave","233-111-2243");
+    public Dealership getDealership() {
+
+        Dealership dealership = null;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            bufferedReader.readLine();
+            String[] dealerString = bufferedReader.readLine().split("\\|");
+            dealership = new Dealership(dealerString[0], dealerString[1], dealerString[2]);
 
             String line = "";
-            while ((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] split = line.split("\\|");
                 int vin = Integer.parseInt(split[0]);
                 int year = Integer.parseInt(split[1]);
@@ -23,7 +25,7 @@ public class DealershipFileManager {
                 int odometer = Integer.parseInt(split[6]);
                 double price = Double.parseDouble(split[7]);
 
-                Vehicle vehicle = new Vehicle(vin,year,make,model,vehicleType,color,odometer,price);
+                Vehicle vehicle = new Vehicle(vin, year, make, model, vehicleType, color, odometer, price);
                 dealership.addVehicle(vehicle);
             }
         } catch (Exception e) {
@@ -32,68 +34,17 @@ public class DealershipFileManager {
         return dealership;
     }
 
-    public void saveDealership(Vehicle vehicle ){
+    public static void saveDealership(Dealership dealership ){
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file,true))){
-            bufferedWriter.write(vehicle.saveFormat());
+            bufferedWriter.write(dealership.toString());
             bufferedWriter.newLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void removeDealership(Vehicle vehicle){
-
-//        List<String> vehicleList = new ArrayList<>();
-//        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
-//            String line;
-//            while ((line = bufferedReader.readLine()) != null){
-//                if (!line.trim().equalsIgnoreCase(vehicle.saveFormat())){
-//                    vehicleList.add(line);
-//                }
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))){
-//           for (String line : vehicleList){
-//               bufferedWriter.write(line);
-//               bufferedWriter.newLine();
-//        }
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
-        File temp = new File("temp.csv");
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(temp));
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null){
-
-                if (line.equalsIgnoreCase(vehicle.saveFormat())){
-                    continue;
-                }
-
-                bufferedWriter.write(line);
+            for (Vehicle vehicle : dealership.getAllVehicle()){
+                bufferedWriter.write(vehicle.saveFormat());
                 bufferedWriter.newLine();
             }
-
-            bufferedReader.close();
-            bufferedWriter.close();
-
-            file.delete();
-            temp.renameTo(file);
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
-
     }
 }

@@ -77,48 +77,10 @@ public class UserInterface {
                       processGetByAllVehicleRequest();
                       break;
                   case 8:
-                      System.out.println("Enter the VIN");
-                      int vin = scanner.nextInt();
-                      System.out.println("Enter the Year");
-                      int year = scanner.nextInt();
-                      scanner.nextLine();
-                      System.out.println("Enter the Make");
-                      String make = scanner.nextLine();
-                      System.out.println("Enter the Model");
-                      String model = scanner.nextLine();
-                      System.out.println("Enter the Vehicle type");
-                      String type = scanner.nextLine();
-                      System.out.println("Enter the Color");
-                      String color = scanner.nextLine();
-                      System.out.println("Enter the Odometer");
-                      int odometer = scanner.nextInt();
-                      System.out.println("Enter the Price");
-                      double price = scanner.nextDouble();
-
-                      Vehicle newVehicle = new Vehicle(vin,year,make,model,type,color,odometer,price);
-                      processGetByAddVehicleRequest(newVehicle);
+                      processGetByAddVehicleRequest();
                       break;
                   case 9:
-                      System.out.println("Enter the VIN");
-                      int vinRemove = scanner.nextInt();
-                      System.out.println("Enter the Year");
-                      int yearRemove = scanner.nextInt();
-                      scanner.nextLine();
-                      System.out.println("Enter the Make");
-                      String makeRemove = scanner.nextLine();
-                      System.out.println("Enter the Model");
-                      String modelRemove = scanner.nextLine();
-                      System.out.println("Enter the Vehicle type");
-                      String typeRemove = scanner.nextLine();
-                      System.out.println("Enter the Color");
-                      String colorRemove = scanner.nextLine();
-                      System.out.println("Enter the Odometer");
-                      int odometerRemove = scanner.nextInt();
-                      System.out.println("Enter the Price");
-                      double priceRemove = scanner.nextDouble();
-
-                      Vehicle removedVehicle = new Vehicle(vinRemove,yearRemove,makeRemove,modelRemove,typeRemove,colorRemove,odometerRemove,priceRemove);
-                      processGetByRemoveVehicleRequest(removedVehicle);
+                      processGetByRemoveVehicleRequest();
                       break;
                   case 99:
                       System.out.println("Thank you!");
@@ -132,10 +94,9 @@ public class UserInterface {
         }
     }
 
-    private Dealership init(){
+    private void init(){
         DealershipFileManager dealershipFileManager = new DealershipFileManager();
         this.dealership =  dealershipFileManager.getDealership();
-        return this.dealership;
     }
 
     private void displayVehicle(List<Vehicle> vehicle){
@@ -145,7 +106,7 @@ public class UserInterface {
         }
 
         for (Vehicle vehicle1 : vehicle){
-            System.out.println(vehicle1);
+            System.out.println(vehicle1.saveFormat());
         }
     }
 
@@ -163,8 +124,7 @@ public class UserInterface {
                     99 - Quit
                     """);
     }
-
-
+    
     public void processGetByPriceRequest(double min, double max){
         Dealership dealership = new Dealership("John","WA","221-112-9646");
         displayVehicle(dealership.getVehicleByPrice(min, max));
@@ -200,14 +160,52 @@ public class UserInterface {
         displayVehicle(dealershipFileManager.getDealership().getAllVehicle());
     }
 
-    public void processGetByAddVehicleRequest(Vehicle vehicle){
-        DealershipFileManager dealershipFileManager = new DealershipFileManager();
-        dealershipFileManager.saveDealership(vehicle);
+    public void processGetByAddVehicleRequest(){
+        System.out.println("Enter the VIN");
+        int vin = scanner.nextInt();
+        System.out.println("Enter the Year");
+        int year = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter the Make");
+        String make = scanner.nextLine();
+        System.out.println("Enter the Model");
+        String model = scanner.nextLine();
+        System.out.println("Enter the Vehicle type");
+        String type = scanner.nextLine();
+        System.out.println("Enter the Color");
+        String color = scanner.nextLine();
+        System.out.println("Enter the Odometer");
+        int odometer = scanner.nextInt();
+        System.out.println("Enter the Price");
+        double price = scanner.nextDouble();
+
+        Vehicle newVehicle = new Vehicle(vin, year, make, model, type, color, odometer, price);
+        this.dealership.addVehicle(newVehicle);
     }
 
-    public void processGetByRemoveVehicleRequest(Vehicle vehicle){
-        DealershipFileManager dealershipFileManager = new DealershipFileManager();
-        dealershipFileManager.removeDealership(vehicle);
+    public void processGetByRemoveVehicleRequest(){
+
+        System.out.println("Enter the VIN");
+        int vinRemove = scanner.nextInt();
+        System.out.println("Enter the Year");
+        int yearRemove = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter the Make");
+        String makeRemove = scanner.nextLine();
+        System.out.println("Enter the Model");
+        String modelRemove = scanner.nextLine();
+        System.out.println("Enter the Vehicle type");
+        String typeRemove = scanner.nextLine();
+        System.out.println("Enter the Color");
+        String colorRemove = scanner.nextLine();
+        System.out.println("Enter the Odometer");
+        int odometerRemove = scanner.nextInt();
+        System.out.println("Enter the Price");
+        double priceRemove = scanner.nextDouble();
+
+        Vehicle removedVehicle = new Vehicle(vinRemove,yearRemove,makeRemove,modelRemove,typeRemove,colorRemove,odometerRemove,priceRemove);
+        this.dealership.remove(removedVehicle);
+
     }
 
 }
